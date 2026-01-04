@@ -1,7 +1,7 @@
 #pragma once
 #include "physics/ParticleSys.h"
 #include <vtkFFMPEGWriter.h>
-#include <vtkGenericOpenGLRenderWindow.h>
+#include <vtkRenderWindow.h>
 #include <vtkPolyData.h>
 #include <vtkRenderer.h>
 #include <vtkSmartPointer.h>
@@ -12,7 +12,7 @@ public:
   VtkAdapter();
 
   // Connects internal VTK renderer to the Qt Widget's window
-  void initialize(vtkGenericOpenGLRenderWindow *window);
+  void initialize(vtkRenderWindow *window);
 
   // Updates visual representation of particles
   void renderParticles(const std::vector<Particle> &particles);
@@ -32,5 +32,5 @@ private:
   bool isRecording = false;
   vtkSmartPointer<vtkFFMPEGWriter> videoWriter;
   vtkSmartPointer<vtkWindowToImageFilter> frameGrabber;
-  vtkGenericOpenGLRenderWindow *renderWindowRef = nullptr;
+  vtkRenderWindow *renderWindowRef = nullptr;
 };

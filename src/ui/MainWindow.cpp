@@ -14,13 +14,13 @@ void InteractionHandler::OnLeftButtonDown() {
   // 2. Raycast into scene
   auto picker = vtkSmartPointer<vtkCellPicker>::New();
   picker->SetTolerance(0.005);
-  picker->Pick(pos, pos[1], 0, this->GetDefaultRenderer());
+  picker->Pick(pos[0], pos[1], 0, this->GetDefaultRenderer());
 
   // 3. Apply perturbation at clicked 3D location
   double *p = picker->GetPickPosition(); // Returns  if miss
   if (physics) {
     // Add a "repulsive" force at click location
-    physics->addPerturbation({p, p[1], p[2]}, 50.0);
+    physics->addPerturbation({p[0], p[1], p[2]}, 50.0);
   }
 
   // Default camera rotation behavior

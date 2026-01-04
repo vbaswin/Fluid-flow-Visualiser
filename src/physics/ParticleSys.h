@@ -26,9 +26,7 @@ public:
       return;
 
     for (auto &p : particles) {
-      if (!p.active |
-
-          | p.pos.z > pipeLength | | std::abs(p.pos.x) > pipeRadius) {
+      if (!p.active || p.pos.z > pipeLength || std::abs(p.pos.x) > pipeRadius) {
         respawn(p); // Recycle particle if out of bounds
       }
 

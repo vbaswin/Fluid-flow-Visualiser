@@ -12,7 +12,7 @@ VtkAdapter::VtkAdapter() {
   renderer->SetBackground(0.1, 0.1, 0.15); // Dark blue-gray background
 }
 
-void VtkAdapter::initialize(vtkGenericOpenGLRenderWindow *window) {
+void VtkAdapter::initialize(vtkRenderWindow *window) {
   renderWindowRef = window;
   window->AddRenderer(renderer);
 
