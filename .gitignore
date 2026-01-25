@@ -12,3 +12,5 @@
 !/CMakeLists.txt
 !/.envrc
 !/README.md
+!/justfile
+!/CMakePresets.json
