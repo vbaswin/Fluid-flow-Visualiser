@@ -84,23 +84,31 @@ void VtkAdapter::renderParticles(const std::vector<Particle> &particles) {
 }
 
 void VtkAdapter::startRecording(const std::string &filename) {
-    if (!renderWindowRef) {
+    if (isRecording) {
+        std::cerr << "Warning: Recording already in progress\n";
+        return;
+    }
 
+    if (!renderWindowRef) {
         std::cerr << "Error: No render window available for recording\n";
         return;
     }
+
+    renderWindowRef->Render();
 
     frameGrabber = vtkSmartPointer<vtkWindowToImageFilter>::New();
     frameGrabber->SetInput(renderWindowRef);
     frameGrabber->SetInputBufferTypeToRGB(); // Important for FFMPEG
     frameGrabber->ReadFrontBufferOff();      // Capture off-screen buffer
+    //
+    frameGrabber->Update();
 
     videoWriter = vtkSmartPointer<vtkFFMPEGWriter>::New();
     videoWriter->SetInputConnection(frameGrabber->GetOutputPort());
     videoWriter->SetFileName(filename.c_str());
     videoWriter->SetRate(30); // 30 FPS
     videoWriter->SetQuality(2);
-    videoWriter->SetBitRate(5000000);
+    // videoWriter->SetBitRate(5000000);
 
     videoWriter->Start();
     isRecording = true;
@@ -112,11 +120,15 @@ void VtkAdapter::stopRecording() {
         videoWriter->End();
         isRecording = false;
     }
+    isRecording = false;
+    videoWriter = nullptr;
+    frameGrabber = nullptr;
 }
 
 void VtkAdapter::captureFrame() {
-    if (isRecording && videoWriter) {
+    if (isRecording && videoWriter && frameGrabber) {
         frameGrabber->Modified();
+        frameGrabber->Update();
         videoWriter->Write();
     }
 }
